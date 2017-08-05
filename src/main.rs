@@ -32,6 +32,15 @@ fn handle_connection(mut stream: TcpStream) {
         stream.write(response.as_bytes()).unwrap();
         stream.flush().unwrap();
     } else {
-        // some other request
+        let header = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
+        let mut file = File::open("404.html").unwrap();
+        let mut contents = String::new();
+
+        file.read_to_string(&mut contents).unwrap();
+
+        let response = format!("{}{}", header, contents);
+
+        stream.write(response.as_bytes()).unwrap();
+        stream.flush().unwrap();
     }
 }
